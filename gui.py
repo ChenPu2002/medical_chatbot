@@ -127,12 +127,22 @@ class ChatWindow(QMainWindow):
         <html>
         <head>
             <style>
+                html, body {
+                    margin: 0;
+                    padding: 0;
+                    height: 100%;
+                    overflow: hidden;
+                }
                 .chat-container {
                     display: flex;
                     flex-direction: column;
                     padding: 10px;
-                    height: 300px;
+                    min-height: 300px;
+                    max-height: 100vh;
                     overflow-y: auto;
+                    scroll-behavior: smooth;
+                    background-color: white;
+                    box-sizing: border-box;
                 }
                 .chat-message {
                     max-width: 60%;
