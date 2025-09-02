@@ -41,7 +41,7 @@ class TreePredictor:
             # change input_value to number
             input_value = input_value.strip()
             # check if input_value is number
-            if input_value.isdigit() and int(input_value) >= 0 and int(input_value) <= len(self.poss_list):
+            if input_value.isdigit() and int(input_value) >= 1 and int(input_value) <= len(self.poss_list):
                 self.symptom_input = self.poss_list[int(input_value) - 1]
                 self.possible_symptoms = td.first_predict(self.symptom_input)
                 self.user_report.append(self.symptom_input)
@@ -102,7 +102,7 @@ class APIPredictor:
         self.min_interactions_for_diagnosis = 5
 
         # Setup the vector store and assistant
-        file_paths = glob.glob('./data/rag/*.txt')
+        file_paths = glob.glob('./data/rag_data/*.txt')
         if not file_paths:
             print("No files found in the directory.")
             raise FileNotFoundError("No files found in the directory.")

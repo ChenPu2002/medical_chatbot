@@ -58,7 +58,11 @@ class TreePredictor:
             
         if self.count==1:
             filtered_df = meds_df[meds_df['name'].str.contains(input_value)].reset_index(drop=True)
-            row=filtered_df.iloc[int(input_value)-1].drop('name')
+            med_index = int(input_value) - 1
+            if med_index < 0 or med_index >= len(filtered_df):
+                self.count -= 1
+                return "Invalid selection. Please choose a valid medicine number."
+            row=filtered_df.iloc[med_index].drop('name')
             use_list=row[row.notna()].to_list()
             response='The use of your medicine inlude:'
             for use in use_list:
@@ -83,7 +87,7 @@ class TreePredictor:
             # change input_value to number
             input_value = input_value.strip()
             # check if input_value is number
-            if input_value.isdigit() and int(input_value) >= 0 and int(input_value) <= len(self.poss_list):
+            if input_value.isdigit() and int(input_value) >= 1 and int(input_value) <= len(self.poss_list):
                 self.symptom_input = self.poss_list[int(input_value) - 1]
                 self.possible_symptoms = td.first_predict(self.symptom_input)
                 self.user_report.append(self.symptom_input)

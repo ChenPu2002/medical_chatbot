@@ -107,14 +107,24 @@ class ChatWindow(QMainWindow):
         # model type choose and change the object to connect
         if self.state == "Tree":
             self.disease_predictor = TreePredictor()
-            self.input.returnPressed.disconnect(self.api_send_message)
-            self.send_button.clicked.disconnect(self.api_send_message)
+            # Safely disconnect API signals if they exist
+            try:
+                self.input.returnPressed.disconnect(self.api_send_message)
+                self.send_button.clicked.disconnect(self.api_send_message)
+            except TypeError:
+                # Signals weren't connected, which is fine
+                pass
             self.input.returnPressed.connect(self.tree_send_message)
             self.send_button.clicked.connect(self.tree_send_message)
         elif self.state == "API":
             self.disease_predictor = APIPredictor()
-            self.input.returnPressed.disconnect(self.tree_send_message)
-            self.send_button.clicked.disconnect(self.tree_send_message)
+            # Safely disconnect tree signals if they exist
+            try:
+                self.input.returnPressed.disconnect(self.tree_send_message)
+                self.send_button.clicked.disconnect(self.tree_send_message)
+            except TypeError:
+                # Signals weren't connected, which is fine
+                pass
             self.input.returnPressed.connect(self.api_send_message)
             self.send_button.clicked.connect(self.api_send_message)
         
