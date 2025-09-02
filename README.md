@@ -9,7 +9,20 @@
 
 *An intelligent medical chatbot that combines machine learning and AI to provide personalized health assistance*
 
+**🏗️ Developed in Hong Kong, April 2024**
+
 </div>
+
+## 📅 Project Timeline & Important Notes
+
+This project was developed in **Hong Kong during April 2024**, when OpenAI's API was still directly accessible from Hong Kong. 
+
+> **⚠️ Important**: As of late 2024, OpenAI API access from Hong Kong has been restricted. If you're running this project from Hong Kong or other restricted regions, you may need to:
+> - Use a VPN service to access OpenAI API
+> - Consider alternative API providers
+> - Use only the local Tree Model mode (which works offline)
+
+The local Tree Model provides full functionality without requiring external API access.
 
 ## 🌟 Features
 
@@ -33,8 +46,8 @@
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repo-url>
-   cd <project-directory>
+   git clone https://github.com/ChenPu2002/medical_chatbot.git
+   cd medical_chatbot
    ```
 
 2. **Create and activate conda environment**
@@ -49,6 +62,8 @@
    ```bash
    echo "OPENAI_API_KEY=your_openai_api_key_here" > .env
    ```
+   
+   > **🌏 Regional Note**: If you're in Hong Kong or other restricted regions, consider using the Tree Model mode instead, which works completely offline.
 
 4. **Run the application**
    ```bash
