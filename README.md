@@ -46,7 +46,8 @@ The local Tree Model provides full functionality without requiring external API 
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/ChenPu2002/medical_chatbot.git
+   # Replace 'your-username' with your GitHub username if you have forked the repository
+   git clone https://github.com/your-username/medical_chatbot.git
    cd medical_chatbot
    ```
 
