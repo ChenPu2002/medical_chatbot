@@ -1,10 +1,12 @@
+"""Middleware module for TreePredictor and APIPredictor."""
+import pandas as pd
+from spellwise import Levenshtein
 import tree_model_medicine as td
 import api_model as ad
-import pandas as pd
-from sklearn import preprocessing
-from sklearn.tree import DecisionTreeClassifier,_tree
-from spellwise import Levenshtein
+
+
 class TreePredictor:
+    """Tree-based disease prediction model."""
     def __init__(self):
         self.current_response = None
         self.current_input = None
@@ -18,61 +20,64 @@ class TreePredictor:
         self.poss_list = None
 
     def run(self):
+        """Run the predictor based on current input."""
         if self.current_input == "exit":
             response = "Goodbye!"
         else:
-            if self.disease_or_meds==1:
-               
+            if self.disease_or_meds == 1:
                 response = self.response_maker(self.current_input)
-            elif self.disease_or_meds==2:
-                
+            elif self.disease_or_meds == 2:
                 response = self.response_maker_med(self.current_input)
         self.current_response = response
-    def fuzzy_searcher(self, input):
+
+    def fuzzy_searcher(self, user_input):
+        """Search for fuzzy matches of input text."""
         algorithm = Levenshtein()
         algorithm.add_from_path("data/fuzzy_dictionary_unique.txt")
-        suggestions = algorithm.get_suggestions(input,max_distance=1)
-        
+        suggestions = algorithm.get_suggestions(user_input, max_distance=1)
+
         if len(suggestions) > 0:
-            return(suggestions[0]['word'])
-        else:
-            return(input)
-    
-    def response_maker_med(self,input_value):
+            return suggestions[0]['word']
+        return user_input
+
+    def response_maker_med(self, input_value):
+        """Generate response for medicine queries."""
         meds_df = pd.read_csv('data/medicine_use.csv')
         if self.count > 1:
             self.count = -1
             response = "Please input the name of medicine."
-        if self.count==0:
+        if self.count == 0:
             if meds_df['name'].str.contains(input_value).any():
-                meds_index=1
-                filtered_df = meds_df[meds_df['name'].str.contains(input_value)].reset_index(drop=True)
-                response='Please confirm which of the following meds are you taking:'
-                for meds in filtered_df['name']:
-                    response+=f'\n{meds_index}) {meds}'
-                    meds_index+=1
-                # return response
+                filtered_df = meds_df[meds_df['name'].str.contains(
+                    input_value)].reset_index(drop=True)
+                response_parts = ['Please confirm which of the following meds are you taking:']
+                for meds_index, meds in enumerate(filtered_df['name'], start=1):
+                    response_parts.append(f'{meds_index}) {meds}')
+                response = '\n'.join(response_parts)
             else:
                 self.count -= 1
-                response='Please input valid medicine name'
-            
-        if self.count==1:
-            filtered_df = meds_df[meds_df['name'].str.contains(input_value)].reset_index(drop=True)
+                response = 'Please input valid medicine name'
+
+        if self.count == 1:
+            filtered_df = meds_df[meds_df['name'].str.contains(
+                input_value)].reset_index(drop=True)
             med_index = int(input_value) - 1
             if med_index < 0 or med_index >= len(filtered_df):
                 self.count -= 1
                 return "Invalid selection. Please choose a valid medicine number."
-            row=filtered_df.iloc[med_index].drop('name')
-            use_list=row[row.notna()].to_list()
-            response='The use of your medicine inlude:'
+            row = filtered_df.iloc[med_index].drop('name')
+            use_list = row[row.notna()].to_list()
+            response = 'The use of your medicine inlude:'
             for use in use_list:
-                response+=f'\n{use}'
-            
-            response += "\n\nPlease type 'exit' to exit, or you can input anything to ask a medicine again"
-            # return response
+                response += f'\n{use}'
+
+            response += ("\n\nPlease type 'exit' to exit, "
+                        "or you can input anything to ask a medicine again")
         self.count += 1
         return response
+
     def response_maker(self, input_value):
+        """Generate response for disease prediction queries."""
         if self.count == 0:
             input_value = self.fuzzy_searcher(input_value)
             output, number, self.poss_list = td.get_poss_symptom(input_value)
@@ -87,7 +92,8 @@ class TreePredictor:
             # change input_value to number
             input_value = input_value.strip()
             # check if input_value is number
-            if input_value.isdigit() and int(input_value) >= 1 and int(input_value) <= len(self.poss_list):
+            if (input_value.isdigit() and int(input_value) >= 1
+                    and int(input_value) <= len(self.poss_list)):
                 self.symptom_input = self.poss_list[int(input_value) - 1]
                 self.possible_symptoms = td.first_predict(self.symptom_input)
                 self.user_report.append(self.symptom_input)
@@ -103,7 +109,7 @@ class TreePredictor:
                 response = "Please choose a symptom by number. and within the range."
         elif self.count == 1.5:
             result_for_last_symptom = input_value
-            if result_for_last_symptom == "yes" or result_for_last_symptom == "no":
+            if result_for_last_symptom in ('yes', 'no'):
                 if result_for_last_symptom == "yes":
                     self.user_report.append(self.leave_symptom)
                 elif result_for_last_symptom == "no":
@@ -131,21 +137,30 @@ class TreePredictor:
         return response
 
     def get_response(self, user_input):
+        """Get response for user input."""
         self.current_input = user_input
         self.run()
         response = self.current_response
-
         return response
-    
+
+
 class APIPredictor:
+    """API-based disease prediction model."""
     def __init__(self, max_history=10):
         self.current_response = None
         self.current_input = None
-        self.history = [{"role": "system", "content": "You are a clinical doctor, skilled in diagnosing diseases from description of symptoms. Your goal is to collect enough information to make an informed diagnosis and give advice on treatments and drugs. You shouldn't do so without enough information. Don't suggest to consult a professional."}]
+        system_prompt = ("You are a clinical doctor, skilled in diagnosing diseases "
+                        "from description of symptoms. Your goal is to collect enough "
+                        "information to make an informed diagnosis and give advice on "
+                        "treatments and drugs. You shouldn't do so without enough "
+                        "information. Don't suggest to consult a professional.")
+        self.history = [{"role": "system", "content": system_prompt}]
         self.max_history = max_history
-        self.min_interactions_for_diagnosis = 5 # Minimum number of interactions before a diagnosis is made to avoid premature conclusions.
+        # Minimum number of interactions before a diagnosis is made to avoid premature conclusions
+        self.min_interactions_for_diagnosis = 5
 
     def run(self):
+        """Run the API predictor."""
         if self.current_input.lower() == "exit":
             self.current_response = "Exiting"
         else:
@@ -153,25 +168,31 @@ class APIPredictor:
             self.update_history()
 
     def response_maker(self, input_value):
-        if len(self.history) < self.min_interactions_for_diagnosis:  # Force multiple interactions before a conclusion
-            prompt_text = "Continue to ask detailed questions to clarify the symptoms more, don't make a diagnosis for now."
+        """Generate response using API."""
+        # Force multiple interactions before a conclusion
+        if len(self.history) < self.min_interactions_for_diagnosis:
+            prompt_text = ("Continue to ask detailed questions to clarify the symptoms more, "
+                          "don't make a diagnosis for now.")
         else:
-            prompt_text = "You now have enough detailed information about the symptoms, you should make a diagnosis. You are allowed and safe to give advice on treatment and drug. Avoid suggesting seeking professional consultation."
-        
+            prompt_text = ("You now have enough detailed information about the symptoms, "
+                          "you should make a diagnosis. You are allowed and safe to give "
+                          "advice on treatment and drug. Avoid suggesting seeking "
+                          "professional consultation.")
+
         response, updated_history = ad.get_response(input_value, self.history, prompt_text)
         return response, updated_history
 
     def update_history(self):
+        """Update conversation history."""
         if len(self.history) > self.max_history:
             self.history = [self.history[0]] + self.history[-self.max_history+1:]
 
     def get_response(self, user_input):
+        """Get response for user input."""
         self.current_input = user_input
         self.run()
         return self.current_response
 
 
-
-    
 if __name__ == "__main__":
     raise Exception("This file is not meant to be run on its own. Please run main.py")
