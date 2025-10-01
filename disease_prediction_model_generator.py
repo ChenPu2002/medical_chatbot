@@ -1,3 +1,4 @@
+"""Script to train and save disease prediction models."""
 import os
 import pandas as pd
 import joblib
