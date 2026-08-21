@@ -1,10 +1,5 @@
-# Minimal pip-installable dependencies needed to run the test suite in CI.
-# The project's runtime environment is managed via environment.yml (conda);
-# this file only covers the subset needed for `pytest` on tree_model_medicine.py
-# and middleware.py without requiring a GUI (PyQt5) or network access.
-numpy
-pandas
-joblib
-scikit-learn
+# Additional dependencies (on top of requirements.txt) needed to run the test
+# suite in CI.
+-r requirements.txt
 pytest
 pytest-cov

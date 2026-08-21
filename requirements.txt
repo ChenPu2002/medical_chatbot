@@ -1,0 +1,16 @@
+# Pip-installable runtime dependencies for the project, mirroring the "pip:"
+# section of environment.yml (which is the source of truth for conda users).
+# Kept separate so CI workflows (pip-audit, tests) can install them without
+# requiring conda. scikit-learn is left unpinned here (unlike environment.yml)
+# to avoid incompatibilities with the newer numpy resolved by pip.
+numpy
+joblib
+pandas
+nltk
+PyQt5==5.15.10
+scikit-learn
+gensim
+PyQtWebEngine
+spellwise
+openai
+python-dotenv
