@@ -7,7 +7,7 @@ numpy
 joblib
 pandas
 nltk
-PyQt5==5.15.10
+PyQt5==5.15.11
 scikit-learn
 gensim
 PyQtWebEngine
