@@ -6,6 +6,8 @@
 ![PyQt5](https://img.shields.io/badge/PyQt5-5.15.10-green.svg)
 ![OpenAI](https://img.shields.io/badge/OpenAI-GPT--3.5--turbo-orange.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
+![Pylint](https://github.com/ChenPu2002/medical_chatbot/actions/workflows/pylint.yml/badge.svg)
+![Tests](https://github.com/ChenPu2002/medical_chatbot/actions/workflows/tests.yml/badge.svg)
 
 *An intelligent medical chatbot that combines machine learning and AI to provide personalized health assistance*
 
@@ -58,12 +60,13 @@ The local Tree Model provides full functionality without requiring external API 
    ```
 
 3. **Set up OpenAI API key** (Required for API mode)
-   
-   Create a `.env` file in the project root:
+
+   Copy `.env.example` to `.env` and fill in your key:
    ```bash
-   echo "OPENAI_API_KEY=your_openai_api_key_here" > .env
+   cp .env.example .env
+   # then edit .env and set OPENAI_API_KEY=your_actual_key
    ```
-   
+
    > **🌏 Regional Note**: If you're in Hong Kong or other restricted regions, consider using the Tree Model mode instead, which works completely offline.
 
 4. **Run the application**
@@ -109,7 +112,11 @@ The local Tree Model provides full functionality without requiring external API 
 ├── disease_prediction_model_generator.py # Model training script
 ├── inference_model_training.ipynb       # Model analysis and visualization
 ├── environment.yml                      # Conda environment configuration
-├── .env                                 # Environment variables (API keys)
+├── requirements.txt                     # Pip runtime dependencies (mirrors environment.yml)
+├── requirements-test.txt                # Pip dependencies for running tests
+├── .env.example                         # Template for environment variables (API keys)
+├── docs/                                # 📚 Project knowledge base (architecture, dev guide, CI/CD, data, FAQ)
+├── tests/                               # Unit tests (pytest)
 ├── data/                                # Training and reference data
 │   ├── training.csv                     # ML training dataset
 │   ├── symptom_Description.csv          # Disease descriptions
@@ -195,12 +202,24 @@ Open `inference_model_training.ipynb` in Jupyter to:
 - Compare different algorithms
 - Explore feature importance
 
+## 📚 Documentation
+
+For deeper technical details, see the project knowledge base in [`docs/`](./docs/README.md):
+
+- [Architecture](./docs/ARCHITECTURE.md) — module map and data flow
+- [Development Guide](./docs/DEVELOPMENT.md) — setup, running, training, testing, linting
+- [CI/CD Guide](./docs/CI_CD.md) — GitHub Actions workflows and automation bots
+- [Data Reference](./docs/DATA.md) — description of files in `data/` and `model/`
+- [FAQ](./docs/FAQ.md) — common issues and known limitations
+
 ## 🤝 Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full contribution workflow, including which CI checks run automatically on your pull request.
 
 1. Fork the repository
 2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
+3. Make your changes (add tests for new logic, see [docs/DEVELOPMENT.md](./docs/DEVELOPMENT.md))
+4. Test thoroughly (`pytest tests/` and `pylint $(git ls-files '*.py')`)
 5. Submit a pull request
 
 ## 📄 License

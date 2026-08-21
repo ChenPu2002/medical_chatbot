@@ -1,0 +1,27 @@
+rag:
+  - changed-files:
+      - any-glob-to-any-file: "RAG_code/**"
+
+data:
+  - changed-files:
+      - any-glob-to-any-file: "data/**"
+
+model:
+  - changed-files:
+      - any-glob-to-any-file: "model/**"
+
+ci/cd:
+  - changed-files:
+      - any-glob-to-any-file: ".github/**"
+
+documentation:
+  - changed-files:
+      - any-glob-to-any-file: "**/*.md"
+
+tests:
+  - changed-files:
+      - any-glob-to-any-file: "tests/**"
+
+gui:
+  - changed-files:
+      - any-glob-to-any-file: "gui.py"

@@ -1,0 +1,35 @@
+name: Dependency Vulnerability Scan
+
+on:
+  push:
+    paths:
+      - "requirements*.txt"
+      - "environment.yml"
+      - ".github/workflows/pip-audit.yml"
+  pull_request:
+    paths:
+      - "requirements*.txt"
+      - "environment.yml"
+      - ".github/workflows/pip-audit.yml"
+  schedule:
+    # Weekly scan to catch newly disclosed vulnerabilities even without changes.
+    - cron: "0 6 * * 1"
+
+jobs:
+  pip-audit:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: "pip"
+      - name: Install audit tooling
+        run: |
+          python -m pip install --upgrade pip
+          pip install pip-audit
+      - name: Run pip-audit
+        run: pip-audit -r requirements-test.txt --progress-spinner=off

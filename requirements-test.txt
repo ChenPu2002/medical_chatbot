@@ -1,0 +1,5 @@
+# Additional dependencies (on top of requirements.txt) needed to run the test
+# suite in CI.
+-r requirements.txt
+pytest
+pytest-cov
