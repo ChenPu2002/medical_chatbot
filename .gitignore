@@ -6,3 +6,6 @@ working/*
 api_generate.*
 test.*
 .env
+.coverage
+coverage.xml
+.pytest_cache/
