@@ -42,5 +42,5 @@ pytest --cov=tree_model_medicine --cov-report=term tests/
 
 # 依赖漏洞扫描
 pip install pip-audit
-pip-audit
+pip-audit -r requirements-test.txt
 ```

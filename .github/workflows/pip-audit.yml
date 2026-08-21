@@ -34,4 +34,4 @@ jobs:
       - name: Run pip-audit
         run: |
           pip install pip-audit
-          pip-audit --progress-spinner=off
+          pip-audit -r requirements-test.txt --progress-spinner=off
