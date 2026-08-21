@@ -8,7 +8,7 @@
 |-----------|---------|------|
 | `pylint.yml` | 变更 `*.py`/`.pylintrc` 时 push/PR | 在 Python 3.8/3.9/3.10 上运行 `pylint`，低于 `.pylintrc` 中 `fail-under=7.0` 阈值则失败 |
 | `tests.yml` | 变更 `*.py`/`requirements*.txt` 时 push/PR | 运行 `pytest`（`tests/` 目录），并生成对 `tree_model_medicine` 模块的覆盖率报告作为 artifact |
-| `pip-audit.yml` | 变更 `*.txt`/`environment.yml` 时 push/PR，另外每周一定时执行 | 用 `pip-audit` 扫描 Python 依赖的已知漏洞 |
+| `pip-audit.yml` | 变更 `requirements*.txt`/`environment.yml` 时 push/PR，另外每周一定时执行 | 用 `pip-audit` 扫描 Python 依赖的已知漏洞 |
 | `gitleaks.yml` | 每次 push/PR | 用 Gitleaks 扫描仓库历史/改动中的密钥泄露 |
 | `codeql.yml` | push/PR 到 `main`，另外每周一定时执行 | GitHub CodeQL 对 Python 代码做静态安全分析 |
 | `labeler.yml` | PR 打开/更新 | 根据改动路径（见 `.github/labeler.yml`）自动为 PR 打标签，如 `rag`、`data`、`ci/cd`、`tests`、`gui` |

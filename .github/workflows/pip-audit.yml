@@ -3,12 +3,12 @@ name: Dependency Vulnerability Scan
 on:
   push:
     paths:
-      - "**.txt"
+      - "requirements*.txt"
       - "environment.yml"
       - ".github/workflows/pip-audit.yml"
   pull_request:
     paths:
-      - "**.txt"
+      - "requirements*.txt"
       - "environment.yml"
       - ".github/workflows/pip-audit.yml"
   schedule:
