@@ -37,7 +37,7 @@ jobs:
         run: |
           pytest --cov=tree_model_medicine --cov-report=xml --cov-report=term tests/
       - name: Upload coverage report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: coverage-report-${{ matrix.python-version }}
           path: coverage.xml
